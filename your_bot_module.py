@@ -1,18 +1,41 @@
-from telethon import TelegramClient, events
+from telethon.sync import TelegramClient
+from telethon.tl.functions.messages import GetDialogsRequest
+from telethon.tl.types import InputPeerEmpty
 
-def start_bot(api_id, api_hash, group_name, bot_token):
-    print("▶️ Connecting with bot token...")
+def start_bot(api_id, api_hash, group_name):
+    # Will prompt for phone number on Render console
+    with TelegramClient('session', api_id, api_hash) as client:
+        # Get dialog list
+        chats = []
+        last_date = None
+        chunk_size = 200
 
-    client = TelegramClient('session', int(api_id), api_hash)
-    client.start(bot_token=bot_token)
-    print("✅ Bot connected!")
+        result = client(GetDialogsRequest(
+            offset_date=last_date,
+            offset_id=0,
+            offset_peer=InputPeerEmpty(),
+            limit=chunk_size,
+            hash=0
+        ))
+        chats.extend(result.chats)
 
-    @client.on(events.NewMessage(chats=group_name))
-    async def handler(event):
-        msg = event.message.message
-        print(f"[{group_name}] {msg}")
+        # Find your target group
+        target_group = None
+        for chat in chats:
+            if chat.title == group_name:
+                target_group = chat
+                break
 
-        # Here you would add Martingale logic (if needed)
+        if not target_group:
+            print("❌ Group not found!")
+            return
 
-    print(f"📡 Listening for messages in '{group_name}'...")
-    client.run_until_disconnected()
+        print(f"✅ Listening to: {group_name}")
+
+        @client.on(events.NewMessage(chats=target_group))
+        async def handler(event):
+            message = event.message.message
+            print(f"New signal: {message}")
+            # Add your logic here to parse message & send to Quotex bot
+
+        client.run_until_disconnected()
