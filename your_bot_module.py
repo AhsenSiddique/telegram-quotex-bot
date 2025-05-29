@@ -1,9 +1,12 @@
 from telethon import TelegramClient, events, sync
 
-def start_bot(api_id, api_hash, group_name, *args):
-    print("Starting Telegram client...")
-
-    client = TelegramClient('session_name', int(api_id), api_hash)
+def start_bot(api_id, api_hash, group_name, bot_token):
+    print("Starting Telegram client with bot token...")
+ client = TelegramClient('session_name', int(api_id), api_hash)
+    client.start(bot_token=bot_token)
+    print(f"Connected to Telegram as bot")
+    ...
+ client = TelegramClient('session_name', int(api_id), api_hash)
     client.start(bot_token=bot_token)
   print(f"Connected to Telegram as {client.get_me().username}")
   @client.on(events.NewMessage(chats=group_name))
