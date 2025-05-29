@@ -1,27 +1,24 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Telegram to Quotex Bot</title>
+  <title>Telegram Bot Starter</title>
 </head>
 <body>
-    <h2>Start Telegram-Quotex Bot</h2>
-    <form method="POST">
-        <label>Telegram API ID:</label><br>
-        <input type="text" name="telegram_api_id"><br>
-        <label>Telegram API Hash:</label><br>
-        <input type="text" name="telegram_api_hash"><br>
-        <label>Telegram Group Name:</label><br>
-        <input type="text" name="telegram_group"><br>
-        <label>Quotex Email:</label><br>
-        <input type="email" name="quotex_email"><br>
-        <label>Quotex Password:</label><br>
-        <input type="password" name="quotex_password"><br>
-        <label>Trade Amount:</label><br>
-        <input type="number" name="trade_amount"><br>
-        <label>Account Type (real/demo):</label><br>
-        <input type="text" name="account_type"><br><br>
-        <button type="submit">Start Bot</button>
-    </form>
+  <h2>Start Telegram Bot</h2>
+  <form method="POST">
+    <label>API ID:</label><br>
+    <input type="text" name="api_id" required><br><br>
+
+    <label>API Hash:</label><br>
+    <input type="text" name="api_hash" required><br><br>
+
+    <label>Telegram Group Name:</label><br>
+    <input type="text" name="group_name" required><br><br>
+
+    <label>Bot Token:</label><br>
+    <input type="text" name="bot_token" required value="8013254394:AAHMjizwj7zLsetDD6ary5aalpA5sM2KZAQ"><br><br>
+
+    <input type="submit" value="Start Bot">
+  </form>
 </body>
 </html>
