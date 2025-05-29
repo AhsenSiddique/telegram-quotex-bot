@@ -1,23 +1,26 @@
-
 from flask import Flask, request, render_template
-from your_bot_module import start_bot
+import threading
+import your_bot_module
 
 app = Flask(__name__)
+bot_thread = None
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    global bot_thread
     if request.method == 'POST':
-        telegram_api_id = request.form['telegram_api_id']
-        telegram_api_hash = request.form['telegram_api_hash']
-        telegram_group = request.form['telegram_group']
-        quotex_email = request.form['quotex_email']
-        quotex_password = request.form['quotex_password']
-        trade_amount = request.form['trade_amount']
-        account_type = request.form['account_type']
+        api_id = request.form['api_id']
+        api_hash = request.form['api_hash']
+        group_name = request.form['group_name']
+        bot_token = request.form['bot_token']
 
-        start_bot(telegram_api_id, telegram_api_hash, telegram_group, quotex_email, quotex_password, trade_amount, account_type)
-        return 'Bot Started! Check your Telegram & Quotex.'
+        if bot_thread is None or not bot_thread.is_alive():
+            bot_thread = threading.Thread(
+                target=your_bot_module.start_bot,
+                args=(api_id, api_hash, group_name, bot_token)
+            )
+            bot_thread.start()
+
+        return "✅ Bot started successfully. Check Render logs for activity."
+
     return render_template('index.html')
-
-if __name__ == '__main__':
-    app.run(debug=True)
