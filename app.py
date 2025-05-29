@@ -10,12 +10,9 @@ def index():
             api_id = int(request.form["api_id"])
             api_hash = request.form["api_hash"]
             group_name = request.form["group_name"]
-            bot_token = request.form["bot_token"]
 
-            # Start the bot using values from the form
-            start_bot(api_id, api_hash, group_name, bot_token)
-
-            return "✅ Bot Started Successfully!"
+            start_bot(api_id, api_hash, group_name)
+            return "✅ Bot Started Successfully! Please check your Telegram for login confirmation."
         except Exception as e:
             return f"❌ Error: {str(e)}"
     return render_template("index.html")
