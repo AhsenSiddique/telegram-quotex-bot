@@ -1,11 +1,16 @@
+from telethon import TelegramClient, events, sync
 
-def start_bot(telegram_api_id, telegram_api_hash, telegram_group, quotex_email, quotex_password, trade_amount, account_type):
-    print("Starting bot with the following:")
-    print(f"Telegram API ID: {telegram_api_id}")
-    print(f"Telegram API Hash: {telegram_api_hash}")
-    print(f"Group: {telegram_group}")
-    print(f"Quotex Email: {quotex_email}")
-    print(f"Password: {'*' * len(quotex_password)}")
-    print(f"Trade Amount: {trade_amount}")
-    print(f"Account Type: {account_type}")
-    # Here you'd put the real bot logic
+def start_bot(api_id, api_hash, group_name, *args):
+    print("Starting Telegram client...")
+
+    client = TelegramClient('session_name', int(api_id), api_hash)
+    client.start()
+    print(f"Connected to Telegram as {client.get_me().username}")
+
+    @client.on(events.NewMessage(chats=group_name))
+    async def handler(event):
+        msg = event.message.message
+        print(f"New message in {group_name}: {msg}")
+
+    print(f"Listening to messages in {group_name}...")
+    client.run_until_disconnected()
