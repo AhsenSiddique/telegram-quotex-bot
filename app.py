@@ -1,26 +1,24 @@
-from flask import Flask, request, render_template
-import threading
-import your_bot_module
+from flask import Flask, render_template, request
+from your_bot_module import start_bot
 
 app = Flask(__name__)
-bot_thread = None
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/", methods=["GET", "POST"])
 def index():
-    global bot_thread
-    if request.method == 'POST':
-        api_id = request.form['api_id']
-        api_hash = request.form['api_hash']
-        group_name = request.form['group_name']
-        bot_token = request.form['bot_token']
+    if request.method == "POST":
+        try:
+            api_id = int(request.form["api_id"])
+            api_hash = request.form["api_hash"]
+            group_name = request.form["group_name"]
+            bot_token = request.form["bot_token"]
 
-        if bot_thread is None or not bot_thread.is_alive():
-            bot_thread = threading.Thread(
-                target=your_bot_module.start_bot,
-                args=(api_id, api_hash, group_name, bot_token)
-            )
-            bot_thread.start()
+            # Start the bot using values from the form
+            start_bot(api_id, api_hash, group_name, bot_token)
 
-        return "✅ Bot started successfully. Check Render logs for activity."
+            return "✅ Bot Started Successfully!"
+        except Exception as e:
+            return f"❌ Error: {str(e)}"
+    return render_template("index.html")
 
-    return render_template('index.html')
+if __name__ == "__main__":
+    app.run(debug=True)
