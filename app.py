@@ -12,13 +12,13 @@ def index():
             api_hash = request.form["api_hash"]
             group_name = request.form["group_name"]
 
-            # Run the bot in a background thread so Flask doesn't freeze
-            threading.Thread(target=start_bot, args=(api_id, api_hash, group_name), daemon=True).start()
+            t = threading.Thread(target=start_bot, args=(api_id, api_hash, group_name))
+            t.daemon = True
+            t.start()
 
-            return "✅ Bot started! Check console logs for activity."
+            return "✅ Bot Started Successfully!"
         except Exception as e:
             return f"❌ Error: {str(e)}"
-
     return render_template("index.html")
 
 if __name__ == "__main__":
