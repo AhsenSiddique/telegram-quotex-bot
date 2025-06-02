@@ -3,7 +3,7 @@ from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty
 
 def start_bot(api_id, api_hash, group_name):
-    # Will prompt for phone number on Render console
+    # Use the saved 'session.session' file by naming it 'session'
     with TelegramClient('session', api_id, api_hash) as client:
         # Get dialog list
         chats = []
@@ -17,25 +17,23 @@ def start_bot(api_id, api_hash, group_name):
             limit=chunk_size,
             hash=0
         ))
+
         chats.extend(result.chats)
 
-        # Find your target group
+        # You can add code here to find the target group by name or id
+        # and process messages or send trades with Martingale logic
+
+        print(f"Found {len(chats)} chats.")
+
+        # Example: find group by name
         target_group = None
         for chat in chats:
             if chat.title == group_name:
                 target_group = chat
                 break
-
-        if not target_group:
-            print("❌ Group not found!")
-            return
-
-        print(f"✅ Listening to: {group_name}")
-
-        @client.on(events.NewMessage(chats=target_group))
-        async def handler(event):
-            message = event.message.message
-            print(f"New signal: {message}")
-            # Add your logic here to parse message & send to Quotex bot
-
-        client.run_until_disconnected()
+        
+        if target_group:
+            print(f"Target group '{group_name}' found!")
+            # Here you can add more code to listen for messages and handle trades
+        else:
+            print(f"Group '{group_name}' not found.")
