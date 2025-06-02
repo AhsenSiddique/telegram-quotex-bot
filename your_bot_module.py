@@ -20,20 +20,18 @@ def start_bot(api_id, api_hash, group_name):
 
         chats.extend(result.chats)
 
-        # You can add code here to find the target group by name or id
-        # and process messages or send trades with Martingale logic
-
         print(f"Found {len(chats)} chats.")
 
-        # Example: find group by name
+        # Find the target group by name
         target_group = None
         for chat in chats:
             if chat.title == group_name:
                 target_group = chat
                 break
-        
+
         if target_group:
             print(f"Target group '{group_name}' found!")
-            # Here you can add more code to listen for messages and handle trades
+            # TODO: Add your Martingale trading logic here
+            # For example, listen for new messages and place trades
         else:
             print(f"Group '{group_name}' not found.")
